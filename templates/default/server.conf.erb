@@ -25,7 +25,7 @@ output {
   <% elsif @es_server_ip -%>
   elasticsearch { host => "<%= @es_server_ip %>" <%= "cluster => \"#{@es_cluster}\"" if @es_cluster %> }
   <% end -%>
-  <% unless @graphite_server_ip.empty? -%>
+  <% if @graphite_server_ip -%>
   graphite { host => "<%= @graphite_server_ip %>" metrics => ["logstash.events", "1"] }
   <% end -%>
   <% # unless node['logstash']['server']['outputs'].empty? -%>

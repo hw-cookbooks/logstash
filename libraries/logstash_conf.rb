@@ -11,8 +11,8 @@ class Erubis::RubyEvaluator::LogstashConf
       return "'#{k}'"
     when "Fixnum", "Float"
       return k.to_s
-    when "Regex"
-      return k.inspect
+    when "Regexp"
+      return "'#{k.source}'"
     end
     return k
   end
@@ -21,12 +21,14 @@ class Erubis::RubyEvaluator::LogstashConf
     case v.class.to_s
     when "String", "Symbol", "Fixnum", "Float"
       "'#{v}'"
-    when "Array"
+    when "Array", "Chef::Node::ImmutableArray"
       "[#{v.map{|e| value_to_str e}.join(", ")}]"
-    when "Hash", "Mash"
+    when "Hash", "Mash", "Chef::Node::ImmutableMash"
       value_to_str(v.to_a.flatten)
     when "TrueClass", "FalseClass"
       v.to_s
+    when "Regexp"
+      "'#{v.source}'"
     else
       v.inspect
     end
